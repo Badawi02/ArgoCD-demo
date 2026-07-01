@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-nginx
+  labels:
+    app: demo-nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-nginx
+  template:
+    metadata:
+      labels:
+        app: demo-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+      volumes:
+        - name: html
+          configMap:
+            name: demo-nginx-html
